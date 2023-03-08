@@ -29,12 +29,20 @@ ergo_score = {
 }
 
 # Define the QWERTY positions for each character
+# qwerty_pos = {
+#     'a': 0, 'b': 13, 'c': 14, 'd': 3, 'e': 4,
+#     'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9,
+#     'k': 10, 'l': 11, 'm': 15, 'n': 12, 'o': 16,
+#     'p': 17, 'q': 0, 'r': 2, 's': 3, 't': 5,
+#     'u': 7, 'v': 12, 'w': 1, 'x': 14, 'y': 8, 'z': 13
+# }
+
 qwerty_pos = {
-    'a': 0, 'b': 13, 'c': 14, 'd': 3, 'e': 4,
-    'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9,
-    'k': 10, 'l': 11, 'm': 15, 'n': 12, 'o': 16,
-    'p': 17, 'q': 0, 'r': 2, 's': 3, 't': 5,
-    'u': 7, 'v': 12, 'w': 1, 'x': 14, 'y': 8, 'z': 13
+    'a': 10, 'b': 23, 'c': 21, 'd': 12, 'e': 2,
+    'f': 13, 'g': 14, 'h': 15, 'i': 7, 'j': 16,
+    'k': 17, 'l': 18, 'm': 25, 'n': 24, 'o': 8,
+    'p': 9, 'q': 0, 'r': 3, 's': 11, 't': 4,
+    'u': 6, 'v': 22, 'w': 1, 'x': 20, 'y': 5, 'z': 19
 }
 
 # Create the Gurobi optimization model
@@ -52,20 +60,22 @@ ergonomics = gp.quicksum(char_freq[i] * ergo_score[k] * char_slot[i,k] for i in 
 # Define the familiarity objective function
 familiarity = gp.quicksum(char_freq[i] * abs(qwerty_pos[i]-k) * char_slot[i,k] for i in characters for k in keyslots)
 
-w_performance = 1
-w_ergonomics = 0.1
-w_familiarity = 0.1
+w_performance = 0.6
+w_ergonomics = 0.2
+w_familiarity = 0.2
 
-m.setObjective(performance - w_ergonomics * ergonomics - w_familiarity * familiarity, gp.GRB.MAXIMIZE)
+
+m.setObjective(performance * w_performance + w_ergonomics * ergonomics + w_familiarity * familiarity, gp.GRB.MINIMIZE)
 
 for i in characters:
     m.addConstr(gp.quicksum(char_slot[(i, k)] for k in keyslots) == 1, f"Assign {i}")
 
+for k in keyslots:
+    m.addConstr(gp.quicksum(char_slot[(i, k)] for i in characters) <= 1, f"Key slot {k} is assigned to at most one character")
 # Solve the problem using Gurobi's default solver
 m.optimize()
 
-# Print the status of the problem (should be 'Optimal')
-print("Status:", gp.GRB.status[m.status])
+#
 
 # Print the optimal keyboard layout
 print("Optimal Keyboard Layout:")
