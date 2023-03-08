@@ -4,7 +4,7 @@ import pulp
 characters = "abcdefghijklmnopqrstuvwxyz"
 
 # Define the keyslot set for the keyboard
-keyslots = range(30)
+keyslots = range(26)
 
 # Define the frequency of each character in the character set
 char_freq = {
@@ -16,10 +16,8 @@ char_freq = {
 }
 
 # Define the time to type each pair of characters
-char_time = {}
-for i in characters:
-    for j in characters:
-        char_time[i, j] = 1
+char_time = {(i, j):0 for i in characters for j in characters}
+
 
 # Define the extreme movements of the wrist and fingers for each keyslot
 ergo_score = {
@@ -45,9 +43,11 @@ prob = pulp.LpProblem("KeyboardLayoutOptimizer", pulp)
 #Define the decision variables, which are binary variables indicating whether a character is assigned to a keyslot
 
 char_keyslot = pulp.LpVariable.dicts("char_keyslot", ((i, j) for i in characters for j in keyslots), cat="Binary")
-#Define the objective function for performance
 
-performance = pulp.lpSum(char_time[i + j] * char_keyslot[(i, k)] * char_keyslot[(j, l)] for i in characters for j in characters for k in keyslots for l in keyslots)
+
+
+#Define the objective function for performance
+performance =  pulp.lpSum(char_time[(i , j)] * char_keyslot[(i, k)] * char_keyslot[(j, l)] for i in characters for j in characters for k in keyslots for l in keyslots)
 #Define the objective function for ergonomics
 
 ergonomics = pulp.lpSum(char_freq[i] * ergo_score[k] * char_keyslot[(i, k)] for i in characters for k in keyslots)
