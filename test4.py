@@ -1,4 +1,5 @@
 import gurobipy as gp
+import json
 
 # Define the character set to be used on the keyboard
 characters = "abcdefghijklmnopqrstuvwxyz"
@@ -8,24 +9,27 @@ keyslots = range(26)
 
 # Define the frequency of each character in the character set
 char_freq = {
-    'a': 0.08167, 'b': 0.01492, 'c': 0.02782, 'd': 0.04253, 'e': 0.12702,
-    'f': 0.02228, 'g': 0.02015, 'h': 0.06094, 'i': 0.06966, 'j': 0.00153,
-    'k': 0.00772, 'l': 0.04025, 'm': 0.02406, 'n': 0.06749, 'o': 0.07507,
-    'p': 0.01929, 'q': 0.00095, 'r': 0.05987, 's': 0.06327, 't': 0.09056,
-    'u': 0.02758, 'v': 0.00978, 'w': 0.02360, 'x': 0.00150, 'y': 0.01974, 'z': 0.00074
+    'a': 0.17410, 'b': 0.01836, 'c': 0.01836, 'd': 0.02648, 'e': 0.05567,
+    'f': 0.01154, 'g': 0.06286, 'h': 0.02825, 'i': 0.07828, 'j': 0.00101,
+    'k': 0.02790, 'l': 0.04132, 'm': 0.03661, 'n': 0.10147, 'o': 0.06298,
+    'p': 0.02755, 'q': 0.00012, 'r': 0.03790, 's': 0.06074, 't': 0.05921,
+    'u': 0.03119, 'v': 0.00530, 'w': 0.01024, 'x': 0.00129, 'y': 0.02025, 'z': 0.00094
 }
 
 # Define the time to type each pair of characters
-char_time = {(i, j):0 for i in characters for j in characters}
+with open('new_performance.json') as f:
+    data = json.load(f)
+new_data = {}
+for key, value in data.items():
+    new_key = tuple(key)
+    new_data[new_key] = value
+char_time = new_data
 
 # Define the extreme movements of the wrist and fingers for each keyslot
 ergo_score = {
-    0: 10, 1: 7, 2: 7, 3: 4, 4: 4,
-    5: 4, 6: 2, 7: 2, 8: 2, 9: 0,
-    10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
-    15: 0, 16: 0, 17: 0, 18: 2, 19: 2,
-    20: 2, 21: 4, 22: 4, 23: 4, 24: 7,
-    25: 7, 26: 7, 27: 10, 28: 10, 29: 10
+    0: 2, 1: 2, 2: 2, 3: 2, 4: 2.5, 5: 3, 6: 2, 7: 2, 8: 2, 9: 2,
+    10: 0, 11: 0, 12: 0, 13: 0, 14: 2, 15: 2, 16: 0, 17: 0, 18: 0, 
+    19: 2, 20: 2, 21: 2, 22: 2, 23: 3.5, 24: 2, 25: 2
 }
 
 # Define the QWERTY positions for each character
@@ -44,7 +48,6 @@ qwerty_pos = {
     'p': 9, 'q': 0, 'r': 3, 's': 11, 't': 4,
     'u': 6, 'v': 22, 'w': 1, 'x': 20, 'y': 5, 'z': 19
 }
-
 # Create the Gurobi optimization model
 m = gp.Model("KeyboardLayoutOptimizer")
 
