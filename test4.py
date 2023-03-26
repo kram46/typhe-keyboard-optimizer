@@ -75,7 +75,8 @@ for k in keyslots:
 # Solve the problem using Gurobi's default solver
 m.optimize()
 
-#
+# Print the status of the problem (should be 'Optimal')
+#print("Status:", gp.GRB.status[m.status])
 
 # Print the optimal keyboard layout
 print("Optimal Keyboard Layout:")
