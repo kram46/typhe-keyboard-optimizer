@@ -65,7 +65,7 @@ w_familiarity = 0.1
 w_performance = 0.9
 w_ergonomics = 0.0
 finalLayout = ""
-with open("keyboard_layouts.txt", "w") as f:
+with open("keyboard_layouts_05.txt", "w") as f:
     while w_performance >= 0.0:
         m.setObjective(performance * w_performance + w_ergonomics * ergonomics + w_familiarity * familiarity, gp.GRB.MINIMIZE)
 
@@ -91,10 +91,10 @@ with open("keyboard_layouts.txt", "w") as f:
                     row += i
             f.write(row)
         f.write("\n")
-        w_performance -= 0.1
-        w_ergonomics += 0.1
-        w_performance = round(w_performance, 1)
-        w_ergonomics = round(w_ergonomics, 1)
+        w_performance -= 0.05
+        w_ergonomics += 0.05
+        w_performance = round(w_performance, 2)
+        w_ergonomics = round(w_ergonomics, 2)
 
 
 
