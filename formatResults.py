@@ -3,7 +3,7 @@ import json
 
 document = []
 
-with open("results.json", "r") as infile:
+with open("results_typheA.json", "r") as infile:
     document = json.loads(infile.read())
 
 newDocument = []
