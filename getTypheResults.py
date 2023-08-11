@@ -8,7 +8,7 @@ cred = credentials.Certificate('./env/delutype-firebase-adminsdk-d20ew-b850f3a34
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 
-collection_ref = firestore_client.collection("results").where("layout", '==', "QWERTY")
+collection_ref = firestore_client.collection("results").where("layout", '==', "typhe's Optimized-Linear Programming Layout A")
 
 docs = collection_ref.stream()
 
@@ -21,9 +21,9 @@ for doc in docs:
     results.append(new_doc)
 
 #print(results)
-
+print(len(results))
 json_object = json.dumps(results, indent=4)
 
 
-with open("results.json", "w") as outfile:
+with open("results_typheA.json", "w") as outfile:
     outfile.write(json_object)

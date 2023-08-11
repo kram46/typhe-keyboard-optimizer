@@ -35,17 +35,29 @@ for key in char_time:
 
 
 
-factor=1.0/sum(new_char_time.values())
-normalised_d = {k: v*factor for k, v in new_char_time.items() }
+# factor=1.0/sum(new_char_time.values())
+# normalised_d = {k: v*factor for k, v in new_char_time.items() }
 
+
+# for key in normalised_d:
+#     if normalised_d[key] == 0:
+#         normalised_d[key] = 1
+#     normalised_d[key] = abs(normalised_d[key] - 1)
 #print(normalised_d)
 
+maxVal = new_char_time[max(new_char_time, key=new_char_time.get)] + 1
+
+print(maxVal)
+
+
+for key in new_char_time:
+    if new_char_time[key] == 0:
+        new_char_time[key] = maxVal
 
 json_serializable = {}
 
-
-for key in normalised_d:
-    json_serializable["{}{}".format(key[0], key[1])] = normalised_d[key]
+for key in new_char_time:
+    json_serializable["{}{}".format(key[0], key[1])] = new_char_time[key]
 
 json_object = json.dumps(json_serializable, indent=4)
 
