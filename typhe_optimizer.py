@@ -17,7 +17,7 @@ char_freq = {
 }
 
 # Define the time to type each pair of characters
-with open('new_performance.json') as f:
+with open('new_performance2.json') as f:
     data = json.load(f)
 new_data = {}
 for key, value in data.items():
@@ -25,16 +25,27 @@ for key, value in data.items():
     new_data[new_key] = value
 char_time = new_data
 
-# # Define the extreme movements of the wrist and fingers for each keyslot
-ergo_score = {
-    0: 10, 1: 7, 2: 7, 3: 4, 4: 4,
-    5: 4, 6: 2, 7: 2, 8: 2, 9: 0,
-    10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
-    15: 0, 16: 0, 17: 0, 18: 2, 19: 2,
-    20: 2, 21: 4, 22: 4, 23: 4, 24: 7,
-    25: 7, 26: 7, 27: 10, 28: 10, 29: 10
-}
+# Define the extreme movements of the wrist and fingers for each keyslot
+# ergo_score = {
+#     0: 10, 1: 7, 2: 7, 3: 4, 4: 4, 5: 4, 6: 2, 7: 2, 8: 2, 9: 10,
+#     10: 0, 11: 0, 12: 0, 13: 0, 14: 4, 15: 4, 16: 0, 17: 0, 18: 0, 
+#     19: 4, 20: 2, 21: 4, 22: 4, 23: 4, 24: 2, 25: 2
+# }
 
+ergo_score = {
+    0: 2, 1: 2, 2: 2, 3: 2, 4: 2.5, 5: 3, 6: 2, 7: 2, 8: 2, 9: 2,
+    10: 0, 11: 0, 12: 0, 13: 0, 14: 2, 15: 2, 16: 0, 17: 0, 18: 0, 
+    19: 2, 20: 2, 21: 2, 22: 2, 23: 3.5, 24: 2, 25: 2}
+
+factor=1.0/sum(ergo_score.values())
+ergo_score = {k: v*factor for k, v in ergo_score.items() }
+
+print(ergo_score)
+
+# ergo_score = {
+#     0: 10, 1: 7, 2: 7, 3: 7, 4: 7, 5: 7, 6: 2, 7: 2, 8: 2, 9: 10,
+#     10: 0, 11: 0, 12: 0, 13: 0, 14: 2, 15: 2, 16: 0, 17: 0, 18: 0, 
+#     19: 2, 20: 2, 21: 2, 22: 2, 23: 3.5, 24: 2, 25: 2 }
 # Define the QWERTY positions for each character
 qwerty_pos = {
     'a': 0, 'b': 13, 'c': 14, 'd': 3, 'e': 4,
@@ -44,6 +55,13 @@ qwerty_pos = {
     'u': 7, 'v': 12, 'w': 1, 'x': 14, 'y': 8, 'z': 13
 }
 
+# qwerty_pos = {
+#     'a': 10, 'b': 23, 'c': 21, 'd': 12, 'e': 2,
+#     'f': 13, 'g': 14, 'h': 15, 'i': 7, 'j': 16,
+#     'k': 17, 'l': 18, 'm': 25, 'n': 24, 'o': 8,
+#     'p': 9, 'q': 0, 'r': 3, 's': 11, 't': 4,
+#     'u': 6, 'v': 22, 'w': 1, 'x': 20, 'y': 5, 'z': 19
+# }
 
 # Create the Gurobi optimization model
 m = gp.Model("KeyboardLayoutOptimizer")

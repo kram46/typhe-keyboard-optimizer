@@ -29,7 +29,7 @@ for key in char_time:
     sum_of_entries = sum(char_time[key])
 
     if number_of_entries == 0:
-        new_char_time[key] =  0
+        new_char_time[key] =  1
     else:
         new_char_time[key] = sum_of_entries / number_of_entries
 
@@ -50,5 +50,5 @@ for key in normalised_d:
 json_object = json.dumps(json_serializable, indent=4)
 
 #print(json_object)
-with open("new_performance.json", "w") as outfile:
+with open("new_performance3.json", "w") as outfile:
     outfile.write(json_object)
